@@ -1,6 +1,9 @@
 package test.acceptance;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
 
 import java.lang.*;
 
@@ -18,6 +21,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 
@@ -36,12 +40,12 @@ public class HomepageSteps {
 
 	@Given("^je suis sur la homepage$")
 	public void je_suis_sur_la_homepage() throws Throwable {
-		driver.get("https://www.meetup.com/fr-FR/");
+		driver.get("https://www.tesla.com/fr_FR/");
 	}
 
 	@Then("^le titre doit être \"([^\"]*)\"$")
 	public void le_titre_doit_être(String arg1) throws Throwable {
-	    assertEquals(driver.getTitle(), arg1);
+		assertEquals(driver.getTitle(), arg1);
 	}
 
 	@Then("^la description contient \"([^\"]*)\"$")
@@ -51,6 +55,23 @@ public class HomepageSteps {
 		// By XPATH, si vous préférez...
 	    // assertEquals(driver.findElement(By.xpath("//meta[@name='description']")).getAttribute("content"), arg1);
 	}
+
+	@Then("^La punchline (\\d+) est \"([^\"]*)\"$")
+	public void la_punchline_est(int arg1, String arg2) throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		List<WebElement> h1list = driver.findElements(By.cssSelector("h1"));
+		assertEquals(h1list.get(arg1+1).getAttribute("innerHTML"), arg2);
+	}
+
+	@Then("^Le lien (\\d+) à pour titre \"([^\"]*)\" et pour lien \"([^\"]*)\"$")
+	public void le_lien_à_pour_titre_et_pour_lien(int arg1, String arg2, String arg3) throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		List<WebElement> elementList = driver.findElements(By.cssSelector("#block-mainheadernavigation .tds-menu-header-nav--list .tds-menu-header-nav--list_item a"));
+		assertEquals(elementList.get(arg1-1).getAttribute("innerHTML"), arg2);
+		assertEquals(elementList.get(arg1-1).getAttribute("href"), arg3);
+	}
+
+
 
 	@After
 	public void afterScenario() {
